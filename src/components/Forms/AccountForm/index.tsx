@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
+import auth from '@react-native-firebase/auth';
 
 import { Button } from '@components/Controllers/Button';
 import { Input } from '@components/Controllers/Input';
@@ -10,8 +11,19 @@ export function AccountForm() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  function handleNewAccount() {
+  async function handleNewAccount() {
+    try {
+      setIsLoading(true);
 
+      await auth().createUserWithEmailAndPassword(email, password);
+      
+      Alert.alert('Conta', 'Conta criada com sucesso!');
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Conta', 'Erro ao criar conta!');	
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

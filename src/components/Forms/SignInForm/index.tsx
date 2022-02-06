@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 import { FooterButton } from '@components/Controllers/FooterButton';
 import { Button } from '@components/Controllers/Button';
@@ -13,12 +15,25 @@ export function SignInForm() {
 
   const navigation = useNavigation();
 
-  function handleSignIn() {
-    setIsLoading(true);
+  async function handleSignIn() {
+    try {
+      setIsLoading(true);
+      await auth().signInWithEmailAndPassword(email, password);
+      Alert.alert('Logado com sucesso!');
+    } catch (error) {
+      Alert.alert('Usuario ou senha inválidos!'); 
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  function handleForgotPassword() {
-
+  async function handleForgotPassword() {
+    try {
+      await auth().sendPasswordResetEmail(email);
+      Alert.alert('Email enviado com sucesso!');
+    } catch (error) {
+      Alert.alert('Email inválido!');
+    } 
   }
 
   return (
