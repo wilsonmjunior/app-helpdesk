@@ -19,7 +19,6 @@ export function SignInForm() {
     try {
       setIsLoading(true);
       await auth().signInWithEmailAndPassword(email, password);
-      Alert.alert('Logado com sucesso!');
     } catch (error) {
       Alert.alert('Usuario ou senha inválidos!'); 
     } finally {
