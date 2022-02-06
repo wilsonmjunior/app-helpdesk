@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 import { Input } from '@components/Controllers/Input';
 import { Button } from '@components/Controllers/Button';
@@ -12,7 +14,24 @@ export function OrderForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   function handleNewOrder() {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
+
+      firestore()
+        .collection('orders')
+        .add({
+          patrimony,
+          description,
+          status: 'open',
+          created_at: firestore.FieldValue.serverTimestamp(),
+        })
+      
+      Alert.alert('Chamado', 'Chamado aberto com sucesso!');
+    } catch (error) {
+      Alert.alert('Chamado', 'Erro ao criar chamado!');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
